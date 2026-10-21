@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Pulse – Personal Fitness Guide</title>
+<meta name="description" content="Pulse – a personal fitness guide with workouts, XP and a camera rep tracker.">
+<link rel="manifest" href="manifest.webmanifest">
+<meta name="theme-color" content="#0c1018">
+<link rel="icon" type="image/png" sizes="32x32" href="favicon-32.png">
+<link rel="icon" type="image/png" sizes="192x192" href="icon-192.png">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="Pulse">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<style>
+:root{--bg:#f3f5fb;--card:#fff;--ink:#101828;--mut:#667085;--line:#e4e7ee;--acc:#4f46e5;--acc2:#10b981;--warn:#b45309;--warnbg:#fef3c7;--hd:rgba(243,245,251,.9);color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media(prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#0c1018;--card:#161c28;--ink:#eef1f7;--mut:#98a2b3;--line:#263044;--acc:#8b87ff;--acc2:#34d399;--warn:#fcd34d;--warnbg:#3a2d0b;--hd:rgba(12,16,24,.9);color-scheme:dark}}
+:root[data-theme="dark"]{--bg:#0c1018;--card:#161c28;--ink:#eef1f7;--mut:#98a2b3;--line:#263044;--acc:#8b87ff;--acc2:#34d399;--warn:#fcd34d;--warnbg:#3a2d0b;--hd:rgba(12,16,24,.9);color-scheme:dark}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.5 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;-webkit-font-smoothing:antialiased}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);background:var(--hd);z-index:10}
+header{position:sticky;top:env(safe-area-inset-top,0px);z-index:9;background:var(--hd);backdrop-filter:blur(10px);display:flex;justify-content:space-between;align-items:center;padding:12px 18px;max-width:640px;margin:auto}
+.logo{font-weight:800;font-size:20px;letter-spacing:-.5px}.logo b{color:var(--acc)}
+main{max-width:640px;margin:auto;padding:4px 16px 110px;animation:in .3s ease}
+@keyframes in{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+h1{font-size:28px;line-height:1.15;margin:8px 0 6px;letter-spacing:-.7px}h2{font-size:18px;margin:22px 0 10px}h3{margin:0;font-size:16px}
+p{margin:0 0 10px}.mut{color:var(--mut);font-size:14px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:18px;padding:16px;margin-bottom:12px;box-shadow:0 2px 10px rgba(16,24,40,.04)}
+.hero{background:linear-gradient(135deg,#4f46e5,#7c3aed 60%,#10b981);color:#fff;border:0;padding:24px}
+.hero p{opacity:.92}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:6px;border:0;border-radius:14px;padding:13px 20px;font:600 16px inherit;background:var(--acc);color:#fff;cursor:pointer;transition:transform .15s,opacity .15s;min-height:48px}
+.btn:active{transform:scale(.97)}.btn.sec{background:transparent;color:var(--ink);border:1.5px solid var(--line)}.btn.blk{width:100%}.btn.wh{background:#fff;color:#4f46e5}.btn.dng{background:#dc2626}
+.row{display:flex;gap:10px;align-items:center}.sp{justify-content:space-between}.wrap{flex-wrap:wrap}.g{display:grid;gap:10px}.g3{grid-template-columns:repeat(3,1fr)}
+.stat{text-align:center;padding:14px 6px}.stat b{display:block;font-size:24px}.stat span{font-size:12px;color:var(--mut)}
+.chip{display:inline-block;padding:4px 10px;border-radius:99px;font-size:12px;font-weight:600;background:color-mix(in srgb,var(--acc) 14%,transparent);color:var(--acc)}
+.chip.c{background:color-mix(in srgb,var(--acc2) 16%,transparent);color:var(--acc2)}
+.item{display:flex;gap:14px;align-items:center;cursor:pointer;transition:transform .15s,border-color .15s}.item:hover{border-color:var(--acc)}.item:active{transform:scale(.985)}
+.ic{width:48px;height:48px;border-radius:14px;display:grid;place-items:center;font-size:24px;background:color-mix(in srgb,var(--acc) 12%,transparent);flex:none}
+label{display:block;font-weight:600;font-size:14px;margin:14px 0 6px}
+input,select{width:100%;padding:12px 14px;border-radius:12px;border:1.5px solid var(--line);background:var(--bg);color:var(--ink);font:16px inherit}
+input:focus,select:focus{outline:2px solid var(--acc);border-color:transparent}
+.err{color:#dc2626;font-size:13px;min-height:18px;margin-top:4px}
+.seg{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}.seg input{display:none}
+.seg span{display:block;text-align:center;padding:12px 4px;border:1.5px solid var(--line);border-radius:12px;font-weight:600;cursor:pointer;font-size:14px}
+.seg input:checked+span{background:var(--acc);color:#fff;border-color:var(--acc)}
+.note{background:var(--warnbg);color:var(--warn);border-radius:14px;padding:12px 14px;font-size:13px;margin:12px 0}
+ol,ul{padding-left:20px;margin:6px 0}li{margin:4px 0}
+nav{position:fixed;left:0;right:0;bottom:0;background:var(--hd);backdrop-filter:blur(12px);border-top:1px solid var(--line);padding:6px 8px calc(6px + env(safe-area-inset-bottom,0px));z-index:9}
+nav div{max-width:640px;margin:auto;display:grid;grid-template-columns:repeat(4,1fr)}
+nav button{background:none;border:0;color:var(--mut);font:600 11px inherit;padding:6px;cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:2px}nav button i{font-style:normal;font-size:20px}nav button.on{color:var(--acc)}
+.bar{height:8px;background:var(--line);border-radius:9px;overflow:hidden}.bar i{display:block;height:100%;background:var(--acc2);border-radius:9px;transition:width .4s}
+.timer{text-align:center}.big{font-size:64px;font-weight:800;letter-spacing:-2px;font-variant-numeric:tabular-nums;line-height:1.1}
+.days{display:flex;gap:8px;align-items:flex-end;height:110px}.days div{flex:1;text-align:center;font-size:11px;color:var(--mut)}.days i{display:block;background:var(--acc);border-radius:6px 6px 0 0;min-height:3px;margin-bottom:4px;opacity:.85}
+.back{background:none;border:0;color:var(--acc);font:600 15px inherit;padding:8px 0;cursor:pointer}
+.tabs{display:flex;gap:8px;overflow-x:auto}
+:root[data-theme="dark"]{--bg:#05070f;--card:#0b1124;--line:#1d3a6b;--acc:#38bdf8;--acc2:#a78bfa;--ink:#e6f1ff;--mut:#7f95b8;--hd:rgba(5,7,15,.92)}
+:root[data-theme="dark"] .btn:not(.sec):not(.wh):not(.dng){color:#04101f;box-shadow:0 0 16px color-mix(in srgb,var(--acc) 50%,transparent)}
+:root[data-theme="dark"] .card{box-shadow:0 0 0 1px color-mix(in srgb,var(--acc) 10%,transparent)}
+.btn.dng{color:#fff}
+.bar i{background:linear-gradient(90deg,var(--acc),var(--acc2))}
+.sys{border:1px solid var(--acc);background:linear-gradient(160deg,var(--card),color-mix(in srgb,var(--acc2) 14%,var(--card)));box-shadow:0 0 22px color-mix(in srgb,var(--acc) 35%,transparent),inset 0 0 30px color-mix(in srgb,var(--acc) 8%,transparent)}
+.tag{font:700 11px ui-monospace,monospace;letter-spacing:2px;color:var(--acc)}
+.rk,.ov .lv{font:900 64px ui-monospace,monospace;color:var(--acc);text-shadow:0 0 18px var(--acc);line-height:1}
+.dn{opacity:.55}.dn .ic{background:color-mix(in srgb,var(--acc2) 30%,transparent)}
+.ov{position:fixed;inset:0;z-index:50;background:rgba(2,6,18,.9);display:grid;place-items:center;text-align:center;padding:24px;animation:in .3s}
+.ov .box{border:1px solid var(--acc);border-radius:18px;padding:30px 24px;background:var(--card);box-shadow:0 0 44px var(--acc);max-width:340px;width:100%}
+.ov .lv{font-size:84px;margin:8px 0}
+.vw{position:relative;border-radius:14px;overflow:hidden;background:#000;aspect-ratio:4/3;margin:10px 0;border:1px solid var(--acc)}
+.vw video{width:100%;height:100%;object-fit:cover;transform:scaleX(-1)}
+.vw .st{position:absolute;left:8px;bottom:8px;background:rgba(0,0,0,.65);color:#fff;font:600 12px ui-monospace,monospace;padding:4px 8px;border-radius:8px}
+</style></head><body>
+<header><div class="logo">Pul<b>se</b></div><button class="btn sec" style="min-height:38px;padding:6px 12px" data-a="theme" aria-label="Toggle theme">◐</button></header>
+<main id="app"></main>
+<nav id="nav" hidden><div>
+<button data-a="go" data-v="home"><i>🏠</i>Status</button><button data-a="go" data-v="train"><i>🏋️</i>Quests</button><button data-a="go" data-v="progress"><i>📈</i>Progress</button><button data-a="go" data-v="profile"><i>👤</i>Profile</button></div></nav>
+<script>
+const KEY="pulse.fitness.v1",LV=["beginner","intermediate","advanced"],LN=["Beginner","Intermediate","Advanced"];
+const CAT={cardio:{n:"Cardio",i:"🏃",d:"Walking, marching and jumping moves to raise your heart rate."},strength:{n:"Strength Training",i:"💪",d:"Bodyweight moves to build strength and stability."},flex:{n:"Flexibility & Mobility",i:"🧘",d:"Stretches and mobility drills for easier movement."}};
+const X=(id,n,c,l,t,s,v,i,st,tip,alt)=>({id,n,c,l,t,s,v,i,st:st.split("|"),tip,alt});
+const EX=[
+X("walk","Brisk Walk","cardio",0,"t",2,120,"🚶","Stand tall and look ahead|Swing your arms naturally at a pace where you can still talk|Land heel to toe with relaxed shoulders","Wear supportive shoes and choose a flat, safe path.","Slow the pace or walk indoors."),
+X("march","March in Place","cardio",0,"t",2,60,"🦵","Lift your knees to a comfortable height|Pump your arms in rhythm|Keep your core gently braced","Hold a wall or chair if your balance feels shaky.","Lower the knee lift and slow down."),
+X("jj","Jumping Jacks","cardio",0,"t",2,30,"🤸","Start with feet together, arms down|Jump feet out while raising arms overhead|Jump back in with soft knees","Land softly on the balls of your feet.","Step-jacks: step one foot out at a time, no jumping."),
+X("hk","High Knees","cardio",1,"t",2,30,"⚡","Run in place, driving knees toward hip height|Pump arms opposite to legs|Stay tall, chest up","Keep landings light; stop if your shins or knees hurt.","March with higher knees instead of running."),
+X("jog","Easy Jog","cardio",1,"t",2,120,"🏃","Begin at an easy, conversational pace|Keep a short, quick stride|Relax your shoulders and breathe steadily","Increase time gradually from week to week.","Alternate 1 minute jogging with 1 minute walking."),
+X("burp","Burpees","cardio",2,"r",2,6,"🔥","From standing, squat and place hands on the floor|Step or jump feet back to a plank, then return|Stand up, adding a small jump if comfortable","Keep your back flat and core braced in the plank.","Step back instead of jumping and skip the push-up."),
+X("wpu","Wall Push-ups","strength",0,"r",2,8,"🧱","Stand an arm’s length from a wall, hands at chest height|Bend elbows to bring your chest toward the wall|Push back to the start with a straight body line","Keep your body in one line from head to heels.","Stand closer to the wall to make it easier."),
+X("sq","Bodyweight Squat","strength",0,"r",2,10,"🦵","Stand with feet shoulder-width apart|Sit hips back and down as if into a chair|Press through your heels to stand","Keep knees tracking over your toes and chest lifted.","Squat to a chair and lightly tap it each rep."),
+X("br","Glute Bridge","strength",0,"r",2,10,"🌉","Lie on your back, knees bent, feet flat|Press through your heels to lift your hips|Pause briefly, then lower with control","Squeeze glutes rather than arching your lower back.","Lift only a few centimetres."),
+X("pu","Push-ups","strength",1,"r",2,8,"🤲","Hands under shoulders, body in a straight line|Lower your chest toward the floor with elbows at about 45°|Press back up without sagging your hips","Stop a rep short of form breaking down.","Do them on your knees or with hands on a bench."),
+X("pl","Plank","strength",1,"t",2,20,"🪵","Rest on forearms, elbows under shoulders|Keep a straight line from head to heels|Breathe steadily and hold","Do not let your lower back sag.","Plank from your knees or with hands on a bench."),
+X("lu","Reverse Lunges","strength",1,"r",2,8,"🚶‍♂️","Stand tall, step one foot back|Lower until both knees are about 90°|Push through the front heel to return; alternate sides","Reps are per side. Use a wall for balance if needed.","Make the step shorter and the dip shallower."),
+X("js","Jump Squats","strength",2,"r",2,8,"🚀","Squat down with chest lifted|Explode upward into a small jump|Land softly and go straight into the next squat","Land with bent knees and quiet feet.","Do fast bodyweight squats without the jump."),
+X("nr","Shoulder & Neck Rolls","flex",0,"t",2,30,"🔄","Sit or stand tall|Roll shoulders slowly up, back and down|Gently tilt your head side to side","Move slowly and never force the range.","Make smaller circles."),
+X("cc","Cat–Cow","flex",0,"t",2,40,"🐈","Start on hands and knees|Inhale: drop belly, lift chest and tailbone|Exhale: round your spine and tuck your chin","Move with your breathing, not past comfort.","Do it seated, hands on your knees."),
+X("hs","Seated Hamstring Stretch","flex",0,"t",2,30,"🪑","Sit with one leg extended, heel on the floor|Hinge forward from the hips with a long spine|Hold, then switch legs","Feel a mild stretch, not pain. Do not bounce.","Bend the extended knee slightly."),
+X("cp","Child’s Pose","flex",0,"t",2,30,"🙇","Kneel and sit hips back toward heels|Reach arms forward and rest your forehead down|Breathe deeply into your back","Skip if kneeling bothers your knees.","Place a pillow between your hips and heels."),
+X("hf","Kneeling Hip Flexor Stretch","flex",1,"t",2,30,"🧎","Kneel on one knee with the other foot forward|Tuck your pelvis and shift weight forward gently|Hold, then switch sides","Pad your knee. Keep your torso upright.","Reduce how far you shift forward."),
+X("wg","World’s Greatest Stretch","flex",1,"r",2,5,"🌍","Step into a lunge with hands inside the front foot|Rotate your chest and reach one arm to the ceiling|Return and repeat, then switch sides","Reps are per side. Move slowly through each position.","Keep your back knee on the floor."),
+X("ds","Deep Squat Hold","flex",2,"t",2,30,"🏺","Lower into a comfortable deep squat|Press elbows against knees and keep your chest tall|Breathe and hold","Hold a post or door frame for support if needed.","Place a rolled towel under your heels.")];
+const $=s=>document.querySelector(s),Q=id=>EX.find(e=>e.id===id);
+let S={p:null,log:[],theme:null,seen:false,view:"home",arg:null},T=null,iv=null;
+try{Object.assign(S,JSON.parse(localStorage.getItem(KEY)||"{}"))}catch(e){}
+const save=()=>{try{localStorage.setItem(KEY,JSON.stringify({p:S.p,log:S.log,theme:S.theme,seen:S.seen,bx:S.bx||0,cl:S.cl||[]}))}catch(e){}};
+const dk=d=>{d=d||new Date();return d.getFullYear()+"-"+String(d.getMonth()+1).padStart(2,"0")+"-"+String(d.getDate()).padStart(2,"0")};
+document.documentElement.dataset.theme=S.theme||"dark";
+const li=()=>LV.indexOf(S.p.level),mmss=s=>Math.floor(s/60)+":"+String(s%60).padStart(2,"0");
+function plan(e){const k=li(),young=S.p.age<16||S.p.age>=60,f=young?.8:1;let sets=e.s+(k>0?1:0);if(young)sets=Math.max(2,sets-1);let v=e.v*[1,1.3,1.6][k]*f;v=e.t==="t"?Math.max(10,Math.round(v/5)*5):Math.max(4,Math.round(v));let rest=Math.round(([60,45,35][k]+(young?15:0))*(e.c==="flex"?.5:1));return{sets,v,rest}}
+const val=(e,p)=>e.t==="t"?(p.v>=60&&p.v%30===0?mmss(p.v)+" min":p.v+" sec"):p.v+" reps";
+function list(c){return EX.filter(e=>e.c===c&&e.l<=li())}
+function picks(){const day=Math.floor(Date.now()/864e5),order=Object.keys(CAT),g=S.p.goal;const first={endurance:"cardio",strength:"strength",flexibility:"flex"}[g];if(first)order.sort((a,b)=>(b===first)-(a===first));return order.map(c=>{const l=list(c);return l[day%l.length]})}
+function streak(){const ds=new Set(S.log.map(x=>x.d));let n=0,d=new Date();if(!ds.has(dk(d)))d.setDate(d.getDate()-1);while(ds.has(dk(d))){n++;d.setDate(d.getDate()-1)}return n}
+function week(){const o=[];for(let i=6;i>=0;i--){const d=new Date();d.setDate(d.getDate()-i);const k=dk(d);o.push({l:d.toLocaleDateString("en",{weekday:"short"}).slice(0,2),n:S.log.filter(x=>x.d===k).length})}return o}
+function ring(p){const r=34,c=2*Math.PI*r;return`<svg width="84" height="84" viewBox="0 0 84 84"><circle cx="42" cy="42" r="${r}" fill="none" stroke="rgba(255,255,255,.25)" stroke-width="8"/><circle cx="42" cy="42" r="${r}" fill="none" stroke="#fff" stroke-width="8" stroke-linecap="round" stroke-dasharray="${c*Math.min(1,p)} ${c}" transform="rotate(-90 42 42)"/></svg>`}
+const item=(e,sub)=>{const p=plan(e);return`<div class="card item" data-a="go" data-v="detail" data-x="${e.id}"><div class="ic">${e.i}</div><div style="flex:1"><h3>${e.n}</h3><div class="mut">${sub||CAT[e.c].n} · ${p.sets} × ${val(e,p)}</div></div><span class="chip">${LN[li()]}</span></div>`};
+function pillar(){return`<div class="note">⚠️ General fitness guidance only, not medical advice. Stop immediately if you feel pain, dizziness or unusual shortness of breath, and speak to a doctor before starting if you have a health concern.</div>`}
+const R={
+onb:()=>`<div class="card hero"><div class="tag" style="color:#fff">[ SYSTEM ]</div><h1>Arise, Hunter.</h1><p>You have been chosen. Clear daily quests, earn XP, raise your stats and climb from E-Rank to S-Rank with bodyweight training matched to your level.</p><button class="btn wh blk" data-a="go" data-v="profile">Begin Awakening ⚡</button></div>
+${Object.values(CAT).map(c=>`<div class="card item" style="cursor:default"><div class="ic">${c.i}</div><div><h3>${c.n}</h3><div class="mut">${c.d}</div></div></div>`).join("")}${pillar()}`,
+profile:()=>{const p=S.p||{},new_=!S.p;return`<h1>${new_?"Awaken, Hunter":"Hunter profile"}</h1><p class="mut">Your details stay on this device only.</p>
+<form id="pf" novalidate class="card">
+<label>Fitness level</label><div class="seg">${LV.map((v,i)=>`<label style="margin:0"><input type="radio" name="level" value="${v}" ${p.level===v?"checked":""}><span>${LN[i]}</span></label>`).join("")}</div><div class="err" id="e-level"></div>
+<label for="age">Age (years)</label><input id="age" type="number" inputmode="numeric" value="${p.age||""}" placeholder="e.g. 24"><div class="err" id="e-age"></div>
+<div class="row"><div style="flex:1"><label for="height">Height (cm)</label><input id="height" type="number" inputmode="decimal" value="${p.height||""}" placeholder="e.g. 170"><div class="err" id="e-height"></div></div><div style="flex:1"><label for="weight">Weight (kg)</label><input id="weight" type="number" inputmode="decimal" value="${p.weight||""}" placeholder="e.g. 65"><div class="err" id="e-weight"></div></div></div>
+<label for="gender">Gender</label><select id="gender"><option value="">Select…</option>${["Female","Male","Non-binary","Prefer not to say"].map(g=>`<option ${p.gender===g?"selected":""}>${g}</option>`).join("")}</select><div class="err" id="e-gender"></div>
+<label for="goal">Main goal</label><select id="goal">${[["general","General fitness"],["endurance","Build endurance"],["strength","Get stronger"],["flexibility","Move more freely"]].map(([v,t])=>`<option value="${v}" ${(p.goal||"general")===v?"selected":""}>${t}</option>`).join("")}</select>
+<p class="mut" style="margin-top:12px">Intensity is set by your level and age. Height, weight and gender are stored for your reference and never used to judge ability or draw health conclusions.</p>
+<button class="btn blk" type="submit">${new_?"Awaken ⚡":"Save changes"}</button></form>
+${S.p?`<button class="btn sec blk" data-a="wipe">Erase all data on this device</button>`:""}${pillar()}`},
+home:()=>{const wk=week().reduce((a,b)=>a+b.n,0),m=Math.round(S.log.reduce((a,b)=>a+b.sec,0)/60);return`<div class="card hero"><div class="row sp"><div><h1 style="margin:0">Today’s plan</h1><p style="margin:6px 0 0">${wk} of 3 sessions this week</p></div>${ring(wk/3)}</div></div>
+<div class="g g3"><div class="card stat"><b>${S.log.length}</b><span>Workouts</span></div><div class="card stat"><b>${m}</b><span>Minutes</span></div><div class="card stat"><b>${streak()}</b><span>Day streak</span></div></div>
+<h2>Recommended for you</h2><p class="mut">${LN[li()]} level · warm up for 3–5 minutes first (easy marching and shoulder rolls).</p>${picks().map(e=>item(e)).join("")}
+<div class="card"><h3>Cool-down</h3><p class="mut" style="margin-top:6px">Finish with 2–3 minutes of slow walking and gentle stretching. Rest 1–2 days between hard sessions.</p></div>${pillar()}`},
+train:()=>`<h1>Dungeon Gates</h1><p class="mut">Pick a category to see exercises suited to ${LN[li()].toLowerCase()} level.</p>${Object.entries(CAT).map(([k,c])=>`<div class="card item" data-a="go" data-v="cat" data-x="${k}"><div class="ic">${c.i}</div><div style="flex:1"><h3>${c.n}</h3><div class="mut">${c.d}</div></div><span class="chip c">${list(k).length}</span></div>`).join("")}`,
+cat:k=>`<button class="back" data-a="go" data-v="train">← Categories</button><h1>${CAT[k].i} ${CAT[k].n}</h1>${list(k).map(e=>item(e,"Unlocked")).join("")}<p class="mut">Higher levels unlock more challenging moves.</p>`,
+detail:id=>{const e=Q(id),p=plan(e);return`<button class="back" data-a="go" data-v="cat" data-x="${e.c}">← ${CAT[e.c].n}</button>
+<div class="row"><div class="ic" style="width:60px;height:60px;font-size:30px">${e.i}</div><div><h1 style="margin:0">${e.n}</h1><span class="chip">${LN[li()]} difficulty</span> <span class="chip c">+${xpOf(e)} XP</span></div></div>
+<div class="g g3" style="margin-top:14px"><div class="card stat"><b>${p.sets}</b><span>Sets</span></div><div class="card stat"><b style="font-size:19px;line-height:36px">${val(e,p)}</b><span>${e.t==="t"?"Per set":"Per set"}</span></div><div class="card stat"><b>${p.rest}s</b><span>Rest</span></div></div>
+<div class="card timer" id="timer"></div>
+<div class="card"><h3>📷 Camera tracker</h3><p class="mut" style="margin:4px 0 0">Counts your reps by detecting movement. Video stays on your device and is never recorded or uploaded.</p><div id="camwrap" hidden><div class="vw"><video id="cv" playsinline muted></video><div class="st" id="cstat">Starting…</div></div></div><div class="err" id="cerr"></div><button class="btn sec blk" id="cbtn" data-a="camtoggle" style="margin-top:8px">Enable camera</button><p class="mut" style="margin:10px 0 0">Tips: prop your phone about 2 m away with your whole body in frame, good lighting, and a steady camera. Press Start, then begin after the 3-second countdown. Use −1/+1 to correct the count.</p></div>
+<div class="card"><h3>How to do it</h3><ol>${e.st.map(s=>`<li>${s}</li>`).join("")}</ol></div>
+<div class="card"><h3>Easier option</h3><p class="mut" style="margin:6px 0 0">${e.alt}</p></div>
+<div class="card"><h3>Safety tips</h3><ul><li>${e.tip}</li><li>Warm up first and cool down afterwards.</li><li>Stop if you feel pain or dizziness.</li></ul></div>${pillar()}`},
+progress:()=>{const w=week(),mx=Math.max(1,...w.map(x=>x.n));const by=k=>S.log.filter(x=>x.c===k).length;return`<h1>Your progress</h1>
+<div class="g g3"><div class="card stat"><b>${S.log.length}</b><span>Workouts</span></div><div class="card stat"><b>${Math.round(S.log.reduce((a,b)=>a+b.sec,0)/60)}</b><span>Minutes</span></div><div class="card stat"><b>${streak()}</b><span>Day streak</span></div></div>
+<div class="card"><h3>Last 7 days</h3><div class="days" style="margin-top:12px">${w.map(x=>`<div><i style="height:${x.n/mx*80}px"></i>${x.l}</div>`).join("")}</div></div>
+<div class="card"><h3>By category</h3>${Object.entries(CAT).map(([k,c])=>`<div style="margin-top:12px"><div class="row sp mut"><span>${c.n}</span><span>${by(k)}</span></div><div class="bar"><i style="width:${S.log.length?by(k)/S.log.length*100:0}%"></i></div></div>`).join("")}</div>
+${badges()}<h2>History</h2>${S.log.length?S.log.slice().reverse().slice(0,50).map(x=>`<div class="card row sp"><div><h3>${x.n}</h3><div class="mut">${new Date(x.ts).toLocaleDateString("en",{month:"short",day:"numeric"})} · ${x.sets} sets · ${mmss(x.sec)}</div></div><span class="chip c">${CAT[x.c].n.split(" ")[0]}</span></div>`).join("")+`<button class="btn sec blk" data-a="clearlog">Clear history</button>`:`<div class="card mut">No workouts yet. Finish one from the Train tab and it will appear here.</div>`}`}};
+const xpOf=e=>20+plan(e).sets*10+li()*10,rk=l=>l<5?"E":l<10?"D":l<15?"C":l<20?"B":l<30?"A":"S",st=c=>10+S.log.filter(x=>x.c===c).reduce((a,b)=>a+b.sets,0);
+function xp(){return S.log.reduce((a,b)=>a+(b.xp||0),0)+(S.bx||0)}
+function lvl(){let x=xp(),l=1,n=100;while(x>=n){x-=n;l++;n=100+(l-1)*50}return{l,cur:x,need:n}}
+function dq(){return picks().map(e=>({e,d:S.log.some(x=>x.d===dk()&&x.id===e.id)}))}
+function best(){const ds=[...new Set(S.log.map(x=>x.d))].sort();let b=0,c=0,p=null;ds.forEach(d=>{c=p&&new Date(d)-new Date(p)===864e5?c+1:1;b=Math.max(b,c);p=d});return b}
+function badges(){const L=lvl().l,cs=new Set(S.log.map(x=>x.c)),n=S.log.length,s=best();const B=[["🗡️","First Blood","Finish 1 workout",n>=1],["🔥","On Fire","3-day streak",s>=3],["⚔️","Veteran","Finish 10 workouts",n>=10],["🌀","All-Rounder","Train all 3 categories",cs.size>=3],["🏅","D-Rank","Reach level 5",L>=5],["👑","Week Warrior","7-day streak",s>=7]];return`<h2>🏆 Achievements</h2><div class="g" style="grid-template-columns:repeat(2,1fr)">${B.map(b=>`<div class="card ${b[3]?"":"dn"}" style="margin:0"><div style="font-size:26px">${b[3]?b[0]:"🔒"}</div><h3>${b[1]}</h3><div class="mut">${b[2]}</div></div>`).join("")}</div>`}
+function lvUp(l){const o=document.createElement("div");o.id="ov";o.className="ov";o.innerHTML=`<div class="box"><div class="tag">[ SYSTEM ]</div><h2>LEVEL UP!</h2><div class="lv">${l}</div><p class="mut">Rank ${rk(l)} Hunter. Your power has grown.</p><button class="btn blk">Continue</button></div>`;document.body.appendChild(o)}
+document.addEventListener("click",e=>{const o=e.target.closest("#ov");if(o)o.remove()});
+R.home=()=>{const L=lvl(),q=dq(),dn=q.filter(x=>x.d).length;return`<div class="card sys"><div class="row sp"><div><div class="tag">[ PLAYER STATUS ]</div><h1 style="margin:2px 0 8px">Hunter</h1><span class="chip">${LN[li()]}</span> <span class="chip c">🔥 ${streak()}-day streak</span></div><div class="rk">${rk(L.l)}</div></div><div class="row sp mut" style="margin-top:16px"><span>LV ${L.l}</span><span>${L.cur} / ${L.need} XP</span></div><div class="bar"><i style="width:${L.cur/L.need*100}%"></i></div></div>
+<div class="g g3">${[["STR","strength"],["AGI","cardio"],["VIT","flex"]].map(([n,c])=>`<div class="card stat"><b>${st(c)}</b><span>${n}</span></div>`).join("")}</div>
+<h2>⚔️ Daily Quests · ${dn}/3</h2>${q.map(x=>`<div class="card item ${x.d?"dn":""}" data-a="go" data-v="detail" data-x="${x.e.id}"><div class="ic">${x.d?"✔":x.e.i}</div><div style="flex:1"><h3>${x.e.n}</h3><div class="mut">${CAT[x.e.c].n} · +${xpOf(x.e)} XP</div></div><span class="chip">${x.d?"CLEARED":"START"}</span></div>`).join("")}
+<p class="mut">Clear all 3 quests for a +50 XP bonus. Strength trains STR, cardio trains AGI, flexibility trains VIT. Warm up for 3–5 minutes first and cool down after.</p>${pillar()}`};
+let CAM=null,civ=null,prev=null,E=0,mx=0,up=false,lp=0;
+function stopCam(){clearInterval(civ);if(CAM)CAM.getTracks().forEach(t=>t.stop());CAM=null;prev=null;E=0;mx=0;up=false}
+function rep(){T.reps=(T.reps||0)+1;T.camUsed=1;try{navigator.vibrate&&navigator.vibrate(40)}catch(e){}if(T.reps>=T.p.v)adv();else drawT()}
+async function startCam(){const er=$("#cerr");er.textContent="";if(!navigator.mediaDevices||!navigator.mediaDevices.getUserMedia){er.textContent="Camera isn’t available in this browser or view. Try opening the page directly in your browser, or keep counting manually.";return}
+try{CAM=await navigator.mediaDevices.getUserMedia({video:{facingMode:"user",width:{ideal:640},height:{ideal:480}},audio:false})}catch(x){CAM=null;er.textContent=x.name==="NotAllowedError"?"Camera permission was blocked. Allow camera access for this page in your browser settings, or keep counting manually.":"Couldn’t start the camera ("+(x.name||"error")+"). Keep counting manually instead.";return}
+const v=$("#cv");if(!v){stopCam();return}v.srcObject=CAM;try{await v.play()}catch(e){}$("#camwrap").hidden=false;$("#cbtn").textContent="Turn camera off";if(T)drawT();
+const c=document.createElement("canvas");c.width=80;c.height=60;const ctx=c.getContext("2d",{willReadFrequently:true});
+civ=setInterval(()=>{const v=$("#cv");if(!v||!CAM||v.readyState<2)return;ctx.drawImage(v,0,0,80,60);const d=ctx.getImageData(0,0,80,60).data,g=new Uint8Array(4800);let m=0;for(let i=0;i<4800;i++){const j=i*4;g[i]=(d[j]*.3+d[j+1]*.59+d[j+2]*.11)|0;if(prev&&Math.abs(g[i]-prev[i])>22)m++}
+if(!prev){prev=g;return}prev=g;E=E*.6+(m/4800)*.4;mx=Math.max(E,mx*.995);const isR=T&&T.ph==="work"&&Q(T.id).t==="r";
+if(T&&T.ph==="work"&&E>.012)T.camUsed=1;
+if(isR&&T.run&&Date.now()>(T.gr||0)){const hi=Math.max(.012,mx*.55),lo=Math.max(.006,mx*.3),n=Date.now();if(!up&&E>hi&&n-lp>250){up=true;lp=n;T.pk=(T.pk||0)+1;if(T.pk%2===0)rep()}else if(up&&E<lo)up=false}
+const s=$("#cstat");if(s)s.textContent=!T?"Press Start workout":T.ph!=="work"?"Resting":Date.now()<(T.gr||0)?"Get ready…":(isR?"Reps "+(T.reps||0)+" · ":"")+"Motion "+"▮".repeat(Math.min(8,Math.round(E*160)))},70)}
+document.addEventListener("click",e=>{const b=e.target.closest("[data-a]");if(!b)return;const a=b.dataset.a;
+if(a==="camtoggle"){if(CAM){stopCam();$("#camwrap").hidden=true;$("#cbtn").textContent="Enable camera";if(T)drawT()}else startCam()}
+else if(a==="rp"&&T&&T.ph==="work"){T.pk=((T.reps||0)+1)*2;rep()}
+else if(a==="rm"&&T&&T.reps>0){T.reps--;T.pk=T.reps*2;drawT()}});
+function render(){clearInterval(iv);T=null;stopCam();const v=S.p?S.view:(S.seen?"profile":"onb");$("#nav").hidden=!S.p;$("#app").innerHTML=R[v](S.arg);document.querySelectorAll("nav button").forEach(b=>b.classList.toggle("on",b.dataset.v===v||(v==="cat"||v==="detail")&&b.dataset.v==="train"));if(v==="detail")drawT();window.scrollTo(0,0)}
+function go(v,x){if(!S.p&&v!=="profile")v="onb";S.view=v;S.arg=x||null;if(v==="profile"||v==="onb")S.seen=true;render()}
+const vib=()=>{try{navigator.vibrate&&navigator.vibrate(200)}catch(e){}};
+function drawT(){const el=$("#timer");if(!el)return;if(!T){el.innerHTML=`<p class="mut">Ready when you are. Warm up first.</p><button class="btn blk" data-a="tstart">▶ Start workout</button>`;return}
+const e=Q(T.id),p=T.p;if(T.ph==="done"){el.innerHTML=`<div class="big">✅</div><div class="tag">[ SYSTEM ]</div><h3>QUEST CLEARED</h3><p class="mut">+${T.xp||0} XP${T.bonus?" · +50 daily bonus!":""}${T.camUsed?" · +10 camera bonus":""}. Cool down with gentle stretching.</p><button class="btn blk" data-a="go" data-v="progress">View progress</button>`;return}
+const w=T.ph==="work",reps=e.t==="r"&&w;el.innerHTML=`<span class="chip ${w?"":"c"}">${w?"WORK":"REST"} · Set ${T.set} of ${p.sets}</span><div class="big">${reps?(CAM?(T.reps||0)+" / "+p.v:p.v):mmss(T.left)}</div><p class="mut">${reps?(CAM?"counting reps by camera":"reps — tap when finished"):w?"Keep steady form":"Breathe and shake it out"}</p>
+<div class="bar" style="margin-bottom:14px"><i style="width:${(T.done+(w?0:1))/p.sets*100}%"></i></div><div class="row wrap" style="justify-content:center">
+${reps?`<button class="btn" data-a="tdone">Set done ✓</button>${CAM?`<button class="btn sec" data-a="rm">−1</button><button class="btn sec" data-a="rp">+1</button>`:""}`:`<button class="btn" data-a="tpause">${T.run?"⏸ Pause":"▶ Resume"}</button>`}${!w||!reps?`<button class="btn sec" data-a="tskip">Skip ⏭</button>`:""}<button class="btn sec" data-a="tend">Finish</button></div>`}
+function adv(){const e=Q(T.id),p=T.p;if(T.ph==="work"){T.done++;if(T.set>=p.sets){return fin()}T.ph="rest";T.left=p.rest}else{T.set++;T.ph="work";T.reps=0;T.pk=0;T.gr=Date.now()+3000;T.left=e.t==="t"?p.v:0}vib();drawT()}
+function fin(){clearInterval(iv);const e=Q(T.id);if(T.done>0){const b=lvl().l;T.xp=20+T.done*10+li()*10+(T.camUsed?10:0);S.log.push({d:dk(),ts:Date.now(),id:e.id,n:e.n,c:e.c,sets:T.done,sec:Math.max(1,T.sec),xp:T.xp});S.cl=S.cl||[];if(dq().every(x=>x.d)&&!S.cl.includes(dk())){S.cl.push(dk());S.bx=(S.bx||0)+50;T.bonus=1}save();if(lvl().l>b)T.lv=lvl().l}T.ph="done";vib();drawT();if(T.lv)lvUp(T.lv)}
+function tick(){if(!T||!T.run||T.ph==="done")return;T.sec++;const e=Q(T.id);if(T.ph==="rest"||e.t==="t"){T.left--;if(T.left<=0)return adv()}drawT()}
+function validate(){const f=n=>$("#"+n).value.trim(),E={},lv=document.querySelector('input[name=level]:checked'),r=(n,lo,hi,u,int)=>{const s=f(n);const x=Number(s);if(s===""||isNaN(x))E[n]="Please enter a number.";else if(int&&!Number.isInteger(x))E[n]="Please enter a whole number.";else if(x<lo||x>hi)E[n]=`Enter a value between ${lo} and ${hi}${u}.`;return x};
+if(!lv)E.level="Please choose a fitness level.";const age=r("age",13,90," years",true),height=r("height",100,230," cm"),weight=r("weight",30,300," kg");if(!E.age&&age<13)E.age="This app is for ages 13 and up.";if(!f("gender"))E.gender="Please select an option.";
+["level","age","height","weight","gender"].forEach(k=>$("#e-"+k).textContent=E[k]||"");if(Object.keys(E).length){const k=Object.keys(E)[0];(document.getElementById(k)||$("#pf")).scrollIntoView({block:"center"});return null}
+return{level:lv.value,age,height,weight,gender:f("gender"),goal:f("goal")}}
+document.addEventListener("submit",e=>{if(e.target.id!=="pf")return;e.preventDefault();const p=validate();if(!p)return;const first=!S.p;S.p=p;S.view="home";save();render()});
+document.addEventListener("click",ev=>{const b=ev.target.closest("[data-a]");if(!b)return;const a=b.dataset.a;
+if(a==="go")go(b.dataset.v,b.dataset.x);
+else if(a==="theme"){const d=document.documentElement,dark=d.dataset.theme?d.dataset.theme==="dark":matchMedia("(prefers-color-scheme:dark)").matches;S.theme=dark?"light":"dark";d.dataset.theme=S.theme;save()}
+else if(a==="tstart"){const e=Q(S.arg);T={id:e.id,p:plan(e),set:1,ph:"work",left:e.t==="t"?plan(e).v:0,run:true,sec:0,done:0,reps:0,pk:0,gr:Date.now()+3000};clearInterval(iv);iv=setInterval(tick,1000);drawT()}
+else if(a==="tpause"){T.run=!T.run;drawT()}else if(a==="tdone")adv();else if(a==="tskip"){const e=Q(T.id);T.ph==="work"?adv():adv()}
+else if(a==="tend"){if(T.done>0)fin();else{clearInterval(iv);T=null;drawT()}}
+else if(a==="clearlog"){if(confirm("Clear all workout history?")){S.log=[];save();render()}}
+else if(a==="wipe"){if(confirm("Erase your profile and all progress from this device?")){S={p:null,log:[],theme:S.theme,seen:false,view:"home",arg:null};try{localStorage.removeItem(KEY)}catch(e){}render()}}});
+render();
+</script>
+<script>
+if("serviceWorker" in navigator){
+  addEventListener("load",()=>{
+    navigator.serviceWorker.register("sw.js").then(reg=>{
+      const ask=w=>{if(!w||!navigator.serviceWorker.controller)return;
+        const t=document.createElement("div");
+        t.style.cssText="position:fixed;left:12px;right:12px;bottom:calc(84px + env(safe-area-inset-bottom,0px));z-index:99;background:#161c28;color:#eef1f7;border:1px solid #263044;border-radius:14px;padding:12px 14px;display:flex;gap:10px;align-items:center;justify-content:space-between;font:600 14px system-ui,sans-serif;max-width:616px;margin:auto";
+        t.innerHTML='<span>Update available</span><button style="border:0;border-radius:10px;padding:8px 14px;background:#34d399;color:#062;font:700 14px system-ui">Reload</button>';
+        t.querySelector("button").onclick=()=>w.postMessage("SKIP_WAITING");
+        document.body.appendChild(t)};
+      if(reg.waiting)ask(reg.waiting);
+      reg.addEventListener("updatefound",()=>{const w=reg.installing;
+        w&&w.addEventListener("statechange",()=>{if(w.state==="installed")ask(w)})});
+    }).catch(()=>{});
+    let r=false;navigator.serviceWorker.addEventListener("controllerchange",()=>{if(r)return;r=true;location.reload()});
+  });
+}
+</script>
+</body></html>
